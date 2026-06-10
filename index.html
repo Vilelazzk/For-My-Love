@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ruth Maryanna 🩷</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background: #14070d;
+            color: white; font-family: 'Segoe UI', Tahoma, sans-serif;
+            text-align: center; overflow-x: hidden; min-height: 100vh;
+        }
+
+        /* FOTO DA PRIMEIRA FASE */
+        #fundo-oculos {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('mary.jpg') no-repeat center center;
+            background-size: cover; 
+            opacity: 0.15;
+            z-index: -3;
+            transition: opacity 0.8s ease;
+        }
+
+        /* CAMADAS PARA O CARROSSEL DE FOTOS COM EFEITO FADE NO FUNDO GERAL (FASE 2) */
+        .bg-foto {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            opacity: 0; z-index: -2;
+            transition: opacity 1.5s ease-in-out;
+        }
+        .bg-foto.ativo {
+            opacity: 0.65;
+        }
+
+        /* Brilho rosa de fundo para tirar o vazio */
+        body::after {
+            content: "";
+            position: fixed; top: 50%; left: 50%;
+            width: 80%; height: 80%;
+            background: radial-gradient(circle, rgba(255, 158, 207, 0.15) 0%, rgba(0,0,0,0) 70%);
+            transform: translate(-50%, -50%);
+            z-index: -4;
+            pointer-events: none;
+        }
+
+        h1 { 
+            margin: 40px 0 10px; font-size: 38px; 
+            color: #ffd6ea;
+            text-shadow: 0 0 20px #ff9ecf, 0 0 40px #ff7bc3; 
+            position: relative; z-index: 1; 
+        }
+        .chamada { font-size: 18px; color: #ffd6ea; margin-bottom: 20px; font-style: italic; position: relative; z-index: 1; }
+
+        /* CENTRALIZAÇÃO E MONTAGEM DO CORAÇÃO */
+        .heart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 60px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .heart {
+            width: 100px;
+            height: 100px;
+            background: #ff9ecf;
+            position: relative;
+            transform: rotate(-45deg);
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 20px #ffb6d9, 0 0 40px #ff7bc3;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            width: 100px;
+            height: 100px;
+            background: #ff9ecf;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart::before { top: -50px; left: 0; }
+        .heart::after { left: 50px; top: 0; }
+
+        /* BOTÃO */
+        #btn { padding: 18px 50px; background: transparent; color: #ff9ecf; border: 2px solid #ff9ecf; border-radius: 50px; font-weight: bold; font-size: 20px; cursor: pointer; text-shadow: 0 0 10px #ff9ecf; margin: 30px 0; position: relative; z-index: 10; transition: 0.4s; animation: pulseBtn 2s infinite; }
+        #btn:hover { background: #ff9ecf; color: #000; box-shadow: 0 0 30px #ff9ecf; }
+
+        .headphone { margin-top: 10px; font-size: 14px; color: #ffb6d9; position: relative; z-index: 1; }
+
+       /* CARD DE MENSAGEM FINAL (ESTILO VIDRO JATEADO) */
+.msgFinal { 
+    display: none;
+    position: relative;
+    margin: 40px auto;
+    padding: 40px 20px; 
+    border-radius: 30px;
+    width: 85%;
+    max-width: 600px; 
+    background: rgba(20, 7, 13, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 158, 207, 0.3); 
+    z-index: 20;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
+}
+
+#fotoTexto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 30px;
+    opacity: 0.45;
+    z-index: 1;
+}
+
+.texto-declaracao {
+    position: relative;
+    line-height: 1.8;
+    font-size: 18px;
+    z-index: 2;
+}
+
+.texto-declaracao p {
+    margin-bottom: 20px;
+}
+
+.frase-especial {
+    font-weight: bold;
+    color: #ffd6ea;
+    font-size: 26px;
+    text-shadow: 0 0 15px #ff9ecf;
+    margin: 30px 0 20px;
+    display: block;
+}
+
+.fade-final {
+    opacity: 0;
+    animation: aparecerFinal 3s ease forwards;
+    animation-delay: 3s;
+    font-size: 22px;
+    color: #ffd6ea;
+    margin-top: 25px;
+    text-shadow: 0 0 15px #ff9ecf;
+    font-style: italic;
+}
+
+        /* ESTILO DOS CORAÇÕES DO CLIQUE */
+        .click-heart {
+            position: fixed;
+            color: #ffd6ea;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 999;
+            text-shadow: 0 0 10px #ff9ecf, 0 0 20px #ff7bc3;
+            animation: explodeHeart 1s ease-out forwards;
+        }
+
+        /* ANIMAÇÕES */
+        @keyframes pulseBtn { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes pulse { 0% { transform: rotate(-45deg) scale(1); } 50% { transform: rotate(-45deg) scale(1.15); } 100% { transform: rotate(-45deg) scale(1); } }
+        @keyframes fall { to { transform: translateY(110vh); } }
+        @keyframes aparecerFinal { to { opacity: 1; } }
+        
+        @keyframes explodeHeart {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(var(--mx), var(--my)) scale(1.4); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<img id="fundo-oculos" src="fundo-oculos.jpg">
+
+    <div id="bg1" class="bg-foto"></div>
+    <div id="bg2" class="bg-foto"></div>
+
+    <h1 id="titulo">For My Favorite Person 🩷</h1>
+    <div class="chamada">Mesmo de longe... isso é pra você.</div>
+
+    <div class="heart-container" id="coracao">
+        <div class="heart"></div>
+    </div>
+
+    <button id="btn">Open Your Heart 🩷</button>
+
+    <div class="headphone" id="aviso-fone">
+        put your headphones on 🎧
+    </div>
+
+    <div id="mensagem" class="msgFinal">
+    <div id="fotoTexto"></div>
+
+    <div class="texto-declaracao">
+        <p style="font-size: 26px; font-weight: bold; color: #ff9ecf; margin-top: 10px;">
+            Feliz Dia dos Namorados, Meu Amor 🩷
+        </p>
+
+        <p>Quem diria que tudo começaria em uma partida de Free Fire, né?</p>
+
+        <p>No meio de tantas pessoas, justamente você apareceu na minha vida. E sinceramente... eu nunca imaginaria que alguém pudesse se tornar tão importante para mim.</p>
+
+        <p>Aos poucos, nossas conversas deixaram de ser apenas conversas. Sem perceber, você começou a fazer parte dos meus dias.</p>
+
+        <p>O mais estranho é que aconteceu naturalmente. Quando eu vi, você já era a pessoa que eu mais gostava de encontrar.</p>
+
+        <p>Mesmo com a distância, o que eu sinto por você é uma das coisas mais reais que eu já senti.</p>
+
+        <p>E hoje eu consigo admitir sem medo nenhum:<br><strong>eu estou completamente apaixonado por você. 🩷</strong></p>
+
+        <span class="frase-especial">
+            Talvez a distância só exista no mapa… porque você já mora no meu coração. 🩷
+        </span>
+
+        <div class="fade-final">
+            and you really are. 🩷
+        </div>
+
+        <div style="margin-top: 40px; font-size: 12px; opacity: 0.4;">
+            made with love by Ireno
+        </div>
+    </div>
+</div>
+
+<audio id="musica" loop preload="auto">
+    <source src="Join Me In Death.mp3" type="audio/mp3">
+</audio>
+
+<script>
+let fotos = [
+    "fundo-oculos.jpg",
+    "foto1.jpg",
+    "foto3.jpg",
+    "foto4.jpg"
+];
+
+let idx = 0;
+let faseAtiva = 1;
+
+// NOVA FUNÇÃO
+function mudarFotoInterna() {
+    document.getElementById("fotoTexto").style.backgroundImage =
+        `url('${fotos[idx]}')`;
+
+    idx = (idx + 1) % fotos.length;
+}
+        
+
+       // CHUVA DE ESTRELAS + GATINHOS BRANCOS E BONITOS (UNICODE ESTENDIDO)
+setInterval(() => {
+    const c = document.createElement("div");
+    c.style.position = "fixed"; 
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.top = "-60px"; 
+    c.style.zIndex = "100";
+    c.style.pointerEvents = "none";
+    
+    // Alterna entre criar uma estrelinha brilhante ou um gatinho branco detalhado
+    if (Math.random() > 0.4) {
+        c.style.width = "4px"; 
+        c.style.height = "4px";
+        c.style.background = "#ffb6d9"; 
+        c.style.borderRadius = "50%";
+        c.style.opacity = "0.7";
+        c.style.boxShadow = "0 0 8px #ff9ecf";
+    } else {
+        // Lista de ícones de gatinhos detalhados e fofos que nascem totalmente brancos
+        const listaGatosBrancos = ["󰄛", "󰄜", "󰄝", "󰄞", "🐈‍⬛"]; 
+        
+        // Caso alguns navegadores antigos tenham ressalvas com o bloco acima,
+        // usamos também variações estéticas universais de gatinhos elegantes:
+        const alternativasfofas = ["𓃠", "🐾", ];
+        
+        // Vamos usar o caractere de gato heráldico/silhueta elegante que fica lindo em branco:
+        c.innerText = "𓃠"; // Este é o símbolo universal de gato egípcio/fofo em vetor linear
+        
+        // Se preferir uma mistura de posições deles bem nítidos:
+        const gatinhosSelecao = ["𓃠", "𓃡", ];
+        c.innerText = gatinhosSelecao[Math.floor(Math.random() * gatinhosSelecao.length)];
+        
+        c.style.fontSize = "45px"; // Bem grandes e imponentes na tela
+        c.style.color = "#ffffff"; // Força eles a serem totalmente BRANCOS e limpos
+        c.style.opacity = "0.9";   
+        
+        // Um efeito de sombra que mistura o branco deles com o neon rosa do seu tema
+        c.style.filter = "drop-shadow(0 0 6px #ff9ecf) drop-shadow(0 0 12px #ff7bc3)"; 
+    }
+    
+    c.style.animation = `fall ${(Math.random()*3+2.5)}s linear forwards`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 5500);
+}, 200);
+
+        // CLIQUE GERA CORAÇÕES CLAROS NEON (Apenas na Fase 1)
+        window.addEventListener('click', (e) => {
+            if (faseAtiva !== 1) return; // Desativa depois que a carta abre para não atrapalhar a leitura
+
+            // Gera de 3 a 5 corações por clique para dar um efeito espalhado gostoso
+            const quantidade = Math.floor(Math.random() * 3) + 3;
+            
+            for (let i = 0; i < quantidade; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('click-heart');
+                heart.innerText = Math.random() > 0.5 ? '🩷' : '🤍'; // Mistura corações rosa claro e branco neon
+                heart.style.left = e.clientX + 'px';
+                heart.style.top = e.clientY + 'px';
+
+                // Define direções aleatórias para onde cada coração vai voar
+                const moverX = (Math.random() - 0.5) * 200 + 'px';
+                const moverY = (Math.random() - 0.5) * 200 - 50 + 'px'; // tende a subir um pouquinho
+                
+                heart.style.setProperty('--mx', moverX);
+                heart.style.setProperty('--my', moverY);
+
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 1000);
+            }
+        });
+
+        // Ação ao Clicar no Botão Principal
+        document.getElementById("btn").onclick = function(e) {
+            e.stopPropagation(); // Impede o clique no botão de duplicar o efeito do clique na janela
+            faseAtiva = 2; // Muda para a fase da carta
+
+            // Esconde os elementos da primeira fase
+            document.getElementById("fundo-oculos").style.opacity = "0";
+            document.getElementById("titulo").style.display = "none";
+            document.getElementById("coracao").style.display = "none";
+            document.querySelector(".chamada").style.display = "none";
+            document.getElementById("aviso-fone").style.display = "none";
+            this.style.display = "none";
+            
+            // Exibe o card de mensagem
+            document.getElementById("mensagem").style.display = "block";
+            
+            // Inicia o carrossel suave de fundo
+            mudarFotoInterna();
+            setInterval(mudarFotoInterna, 4500);
+            
+            // Liga a música
+            const musica = document.getElementById("musica");
+            musica.volume = 0.6;
+            musica.currentTime = 146; 
+            musica.play().catch(e => console.log("A reprodução automática pode precisar de interação."));
+            
+            // Reseta o scroll para o topo para ler confortavelmente
+            setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+        };
+    </script>
+</body>
+</html>
